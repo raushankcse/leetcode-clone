@@ -22,8 +22,7 @@ export const getSubmissions = onRequest(async (request, response) => {
   const limit = request.body.limit || 10;
   const res = await db.collection("submissions")
     .limit(limit)
-    .orderBy("submitTime", "desc")
-    .get();
+    .orderBy("submitTime", "desc").get();
   const submissions = [];
   res.docs.forEach((doc) =>{
     submissions.push(doc.data());
@@ -42,8 +41,7 @@ export const submit = onCall(async (request)=>{
   const problemId = request.data.problemId;
 
   const problem = await db.collection("problems")
-    .doc(problemId?.toString())
-    .get();
+    .doc(problemId?.toString()).get();
   if (!uid) {
     return {
       message: "Unautorized",
