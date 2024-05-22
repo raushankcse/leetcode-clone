@@ -67,7 +67,7 @@ export const submit = onCall(async (request)=>{
     userId: uid,
     submitTime: new Date(),
     workerTryCount: 0,
-    status: "PENDING",
+    status: "PENDING...",
   });
   return {
     message: "Submission done",
