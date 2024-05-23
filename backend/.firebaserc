@@ -1,5 +1,9 @@
 {
   "projects": {
-    "default": "leetcode-clone-5ecf3"
-  }
+    "default": "leetcode-clone-5ecf3",
+    "leetcode": "leetcode-clone-5ecf3"
+  },
+  "targets": {},
+  "etags": {},
+  "dataconnectEmulatorConfig": {}
 }
