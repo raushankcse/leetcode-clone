@@ -10,6 +10,10 @@ import { Topbar } from './components/Topbar';
 import { Card } from './components/Card';
 import { app } from './utils/firebase';
 import { SubmissionActivityList } from './components/SubmissionActivityList';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { Landing } from './components/Landing';
+import { About } from './components/About';
+
 
 // const firebaseConfig = {
 //   apiKey: "AIzaSyCN3-raoVPQrqCPXaivm2-FzTClqugbmyI",
@@ -61,9 +65,15 @@ function StoreApp(){
   return (
     <div className="place-items-center grid">
        <div className="max-w-screen-lg w-full ">
-        <Topbar />
-        <Leaderboard/>
-        <SubmissionActivityList/>
+        <Router>
+          <Topbar />
+            <Routes>
+              <Route path='/' element={<Landing/>}/>
+              <Route path='/about' element={<About/>}/>
+              <Route path='/activity' element={<SubmissionActivityList/>}/>
+              {/* <Route path='/problems' element={<ProblemList/>}/> */}
+            </Routes>
+          </Router>  
       </div>
     </div>
   )

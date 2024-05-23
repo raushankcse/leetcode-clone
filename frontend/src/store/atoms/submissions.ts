@@ -5,11 +5,11 @@ type Submission = {
   language: string;
   timestamp: number;
   submission: string;
-  status
+  status:true;
 }
 
 
-const globalSubmissions = selector({
+export const globalSubmissions = selector({
   key: 'globalSubmissions', 
   get: async({get})=>{
     const response = await axios.get("http://127.0.0.1:5001/leetcode-clone-5ecf3/us-central1/getSubmissions");

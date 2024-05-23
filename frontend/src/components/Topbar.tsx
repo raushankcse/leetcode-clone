@@ -1,3 +1,5 @@
+import { Link  } from "react-router-dom"
+
 
 export const Topbar = () => {
     return <div className="max-w-screen-lg w-full bg-black min-h-56 align-center px-5 pb-5 pt-8">
@@ -38,8 +40,9 @@ function NavbarItem({title, route}: {
     title: string;
     route: string;
 }){
-    return <div className="mr-10 text-slate-500 text-lg cursor-pointer hover:text-white text-base font-light">
-        {title}  
+    return <Link to={title}> <div className="mr-10 text-slate-500 text-lg cursor-pointer hover:text-white text-base font-light">
+            {title}  
 
-    </div>
+        </div>
+    </Link>
 }
