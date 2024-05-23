@@ -1,4 +1,5 @@
 import {setGlobalOptions} from "firebase-functions/v2";
+
 import {onRequest} from "firebase-functions/v2/https";
 import {logger} from "firebase-functions";
 // import {initializeApp} from "firebase-admin/app";
@@ -19,7 +20,7 @@ export const helloWorld = onRequest((request, response) => {
   response.send("Hello from Firebase!");
 });
 
-export const getSubmissions = onRequest(async (request, response) => {
+export const getSubmissions = onRequest({cors:true},async (request, response) => {
   try {
     const limit = request.body.limit || 10;
     const res = await db.collection("submissions")

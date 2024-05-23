@@ -9,6 +9,7 @@ import { userAtom } from './store/atoms/user';
 import { Topbar } from './components/Topbar';
 import { Card } from './components/Card';
 import { app } from './utils/firebase';
+import { SubmissionActivityList } from './components/SubmissionActivityList';
 
 // const firebaseConfig = {
 //   apiKey: "AIzaSyCN3-raoVPQrqCPXaivm2-FzTClqugbmyI",
@@ -25,7 +26,7 @@ export const auth = getAuth(app);
 
 function App() {
   return <RecoilRoot>
-    <StoreApp/>
+    <StoreApp/> 
   </RecoilRoot>
 }
 
@@ -61,7 +62,8 @@ function StoreApp(){
     <div className="place-items-center grid">
        <div className="max-w-screen-lg w-full ">
         <Topbar />
-        <Card> hi there</Card>
+        <Leaderboard/>
+        <SubmissionActivityList/>
       </div>
     </div>
   )
