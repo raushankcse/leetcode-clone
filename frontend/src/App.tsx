@@ -71,7 +71,7 @@ function StoreApp(){
               <Route path='/' element={<Landing/>}/>
               <Route path='/about' element={<About/>}/>
               <Route path='/activity' element={<SubmissionActivityList/>}/>
-              {/* <Route path='/problems' element={<ProblemList/>}/> */}
+              <Route path='/problems' element={<ProblemList problemList = {problemList}/>}/>
             </Routes>
           </Router>  
       </div>

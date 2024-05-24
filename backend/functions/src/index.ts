@@ -1,6 +1,6 @@
 import {setGlobalOptions} from "firebase-functions/v2";
 
-import {onRequest} from "firebase-functions/v2/https";
+import {onCall, onRequest} from "firebase-functions/v2/https";
 import {logger} from "firebase-functions";
 // import {initializeApp} from "firebase-admin/app";
 // import {getFirestore} from "firebase-admin/firestore";
@@ -26,37 +26,55 @@ export const getSubmissions = onRequest({cors:true},async (request, response) =>
     const res = await db.collection("submissions")
       .limit(limit)
       .orderBy("submitTime", "desc").get();
-    const submissions = res.docs.map((doc) => doc.data());
+    
+    const submissions = [];
+    res.docs.forEach(async doc => {
+      console.log("doc1")
+      submissions.push(new Promise(async (resolve) => {
+        console.log(doc.data().user)
+        const snapshot = await doc.data().user.get();
+        resolve({
+          submission: doc.data(),
+          user : snapshot.data()
+        })
+      }))
+     })
 
-    response.status(200).send({response: submissions});
+
+    response.status(200).send({
+      response:await Promise.all(submissions)
+    });
   } catch (error) {
     logger.error("Error fetching submissions", error);
     response.status(500).send({error: "Failed to fetch submissions"});
   }
 });
 
-export const submit = onRequest(async (request, response) => {
-  try {
-    const uid = request.body.uid;
-    const language = request.body.language;
-    const submission = request.body.submission;
-    const problemId = request.body.problemId;
+export const submit = onCall(async (request) => {
+    const uid = request.auth.uid;
+    const language = request.data.language;
+    const submission = request.data.submission;
+    const problemId = request.data.problemId;
 
     if (!uid) {
-      response.status(401).send({message: "Unauthorized"});
-      return;
+      return{
+        message: "Unauthorized"
+      }
     }
 
     if (!SUPPORTED_LANGUAGES.includes(language)) {
-      response.status(400).send({message: "Language not supported"});
-      return;
+      return{
+        message: "Language not supported"
+      }
     }
 
-    const problemDoc = await db.collection("problems")
-      .doc(problemId?.toString()).get();
-    if (!problemDoc.exists) {
-      response.status(404).send({message: "Problem doesn't exist"});
-      return;
+    const problem = await db.collection("problems").doc(problemId?.toString()).get();
+
+
+    if (!problem.exists) {
+      return{
+        message: "Problem Doesn't exist"
+      }
     }
 
     const doc = await db.collection("submissions").add({
@@ -66,13 +84,12 @@ export const submit = onRequest(async (request, response) => {
       userId: uid,
       submitTime: new Date(),
       workerTryCount: 0,
-      status: "PENDING...",
+      status: "PENDING",
     });
-
-    response.status(200).send({message: "Submission done", id: doc.id});
-  } catch (error) {
-    logger.error("Error submitting", error);
-    response.status(500).send({message: "Submission failed"});
-  }
-});
+    return {
+      message: "Submission done",
+      id: doc.id
+    }
+  
+})
 
